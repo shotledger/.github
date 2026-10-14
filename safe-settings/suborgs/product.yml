@@ -1,0 +1,91 @@
+# The product repo.
+suborgrepos:
+  - shotledger
+
+# Workaround for safe-settings shared-object mutation bug:
+# Without a suborg entry, all repos share the same repoConfig reference via
+# Object.assign() mutation. Adding a suborg causes mergeDeep({}, ...) which
+# creates a fresh object per repo, giving each repo its correct name.
+repository: {}
+
+# Generated from shotledger/shotledger's live labels on 2026-10-14, all of them.
+# Referenced by the issue templates, Renovate and hand triage; GitHub issue
+# forms and Renovate silently drop labels that do not exist.
+#
+# WARNING: safe-settings is declarative about labels -- a label that exists on a
+# repo but is absent from this list is DELETED on the next sync unless it
+# matches an `exclude` pattern. Do not prune entries here to tidy the file.
+labels:
+  include:
+    - name: "accessibility"
+      color: "f143ab"
+      description: "Barrier affecting people with disabilities"
+    - name: "blocked"
+      color: "b60205"
+      description: "Waiting on something else; do not start yet"
+    - name: "bot-renovate"
+      color: "ededed"
+      description: "Renovate-authored PR"
+    - name: "bot-renovate-rebase"
+      color: "0e8a16"
+      description: "Ask Renovate to rebase this PR"
+    - name: "bot-renovate-stop"
+      color: "d93f0b"
+      description: "Stop Renovate updating this PR"
+    - name: "bug"
+      color: "d73a4a"
+      description: "Something isn't working"
+    - name: "dependencies"
+      color: "0366d6"
+      description: "Dependency update"
+    - name: "documentation"
+      color: "0075ca"
+      description: "Improvements or additions to documentation"
+    - name: "duplicate"
+      color: "cfd3d7"
+      description: "This issue or pull request already exists"
+    - name: "e2e"
+      color: "ededed"
+      description: ""
+    - name: "enhancement"
+      color: "a2eeef"
+      description: "New feature or request"
+    - name: "good first issue"
+      color: "7057ff"
+      description: "Good for newcomers"
+    - name: "help wanted"
+      color: "008672"
+      description: "Extra attention is needed"
+    - name: "invalid"
+      color: "e4e669"
+      description: "This doesn't seem right"
+    - name: "needs-triage"
+      color: "ededed"
+      description: "Not yet understood or classified; needs more information or investigation"
+    - name: "question"
+      color: "d876e3"
+      description: "Further information is requested"
+    - name: "renovate-version-digest"
+      color: "ededed"
+      description: "Digest update"
+    - name: "renovate-version-lockfile"
+      color: "ededed"
+      description: ""
+    - name: "renovate-version-major"
+      color: "d93f0b"
+      description: "Major version bump"
+    - name: "renovate-version-minor"
+      color: "fbca04"
+      description: "Minor version bump"
+    - name: "renovate-version-patch"
+      color: "c2e0c6"
+      description: "Patch version bump"
+    - name: "renovate-version-pin"
+      color: "ededed"
+      description: "Pin action"
+    - name: "security"
+      color: "b60205"
+      description: "Security-relevant change"
+    - name: "wontfix"
+      color: "ffffff"
+      description: "This will not be worked on"

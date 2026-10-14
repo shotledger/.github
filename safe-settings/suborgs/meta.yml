@@ -1,0 +1,11 @@
+# This repo: the safe-settings configuration itself. Gets the org-wide
+# repository defaults and nothing else; its labels are left alone because no
+# `labels:` key is declared here.
+suborgrepos:
+  - .github
+
+# Workaround for safe-settings shared-object mutation bug:
+# Without a suborg entry, all repos share the same repoConfig reference via
+# Object.assign() mutation. Adding a suborg causes mergeDeep({}, ...) which
+# creates a fresh object per repo, giving each repo its correct name.
+repository: {}

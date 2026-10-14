@@ -1,0 +1,45 @@
+repository:
+  has_issues: true
+  has_wiki: false
+  has_projects: false
+  has_discussions: false
+
+  # Squash-only. Merge commits and rebase both produce histories that break the
+  # assumption the release tooling depends on: that every commit on main is a
+  # Conventional Commits subject a version can be derived from.
+  allow_squash_merge: true
+  allow_merge_commit: false
+  allow_rebase_merge: false
+
+  # PR_TITLE, not COMMIT_OR_PR_TITLE (GitHub's default). The default uses the
+  # commit subject when a PR has exactly one commit, so a single-commit PR
+  # could land with a subject nobody reviewed as the title. PR_TITLE means the
+  # thing that was reviewed is the thing that lands.
+  squash_merge_commit_title: PR_TITLE
+  # COMMIT_MESSAGES, not BLANK: the squash body is what carries the
+  # `Signed-off-by:` trailers of the squashed commits onto main. DCO sign-off is
+  # required on every commit here, and BLANK would drop that record from the
+  # only history that survives a squash merge.
+  squash_merge_commit_message: COMMIT_MESSAGES
+
+  delete_branch_on_merge: true
+  allow_update_branch: true
+
+  # Off: platform auto-merge does not exist for private repos on a free plan.
+  allow_auto_merge: false
+
+  web_commit_signoff_required: true
+
+  security:
+    enableVulnerabilityAlerts: true
+    # Renovate owns dependency PRs; Dependabot security fixes stay off to avoid two bots
+    # opening duplicate PRs for the same CVE.
+    enableAutomatedSecurityFixes: false
+
+# Labels are declared per suborg (suborgs/product.yml), not here: a label list
+# at this level would also be applied to `.github` and replace its own labels.
+#
+# No `rulesets:` or `environments:` anywhere in this config. This is a free org
+# and both repos are private: org rulesets need GitHub Team, repository rulesets
+# on a private repo need GitHub Pro, and environment protection rules are not
+# available either. Each would fail the whole sync.
