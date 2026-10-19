@@ -12,7 +12,7 @@ community health files or templates; it only holds this configuration.
 | Path | Owns |
 |---|---|
 | `safe-settings/settings.yml` | org-wide repository defaults (squash-only, branch cleanup, sign-off, security toggles) |
-| `safe-settings/suborgs/product.yml` | `shotledger`: its full label set |
+| `safe-settings/suborgs/product.yml` | `shotledger`: its full label set and the `protect-main` ruleset with its required checks |
 | `safe-settings/suborgs/meta.yml` | this repo: the defaults only, labels untouched |
 | `safe-settings/deployment-settings.yml` | scope: an empty exclude list, deliberately |
 
@@ -21,8 +21,12 @@ Things that bite:
 - **safe-settings deletes any label not listed** for a repo that declares labels.
   Never prune the list in `product.yml` to tidy it; add a label there before (or
   with) anything that uses it.
-- **No rulesets, environments or auto-merge.** The org is on the free plan and
-  both repos are private, so none of them exist; declaring one fails the sync.
+- **Rulesets only on a public repo.** The org is on the free plan: a repository
+  ruleset on a private repo fails the sync, so `shotledger`'s `protect-main`
+  can only be applied once that repo is public. No environments or auto-merge
+  are declared yet.
+- **A required status check that a repo never produces blocks every PR on it
+  forever.** A new context must have run on a real PR before it is added.
 - **There is no `DRY_RUN`.** The knob is `FULL_SYNC_NOP`, exposed as the `nop`
   dispatch input, and it crashes in 2.1.18, so it is not a usable preview. Diff
   intent against the live API instead.
