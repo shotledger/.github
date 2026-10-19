@@ -6,7 +6,72 @@ suborgrepos:
 # Without a suborg entry, all repos share the same repoConfig reference via
 # Object.assign() mutation. Adding a suborg causes mergeDeep({}, ...) which
 # creates a fresh object per repo, giving each repo its correct name.
-repository: {}
+#
+# Auto-merge is on for this repo only: `.github` stays private, where the free
+# plan has no auto-merge. Like the rulesets, it needs shotledger public.
+repository:
+  allow_auto_merge: true
+
+# Repository rulesets, so they need the repo public: on a private repo on the free
+# plan it fails the whole sync.
+rulesets:
+  - name: protect-main
+    target: branch
+    enforcement: active
+    conditions:
+      ref_name:
+        include: ["~DEFAULT_BRANCH"]
+        exclude: []
+    bypass_actors:
+      # Sole-maintainer org: the review requirement below is real four-eyes only
+      # once a second reviewer exists; until then the org admin bypasses it.
+      # Renovate gets no bypass: renovate-approve satisfies the review, and every
+      # check stays enforced on its PRs.
+      - actor_id: 1
+        actor_type: OrganizationAdmin
+        bypass_mode: always
+    rules:
+      - type: deletion
+      - type: non_fast_forward
+      - type: pull_request
+        parameters:
+          required_approving_review_count: 1
+          dismiss_stale_reviews_on_push: true
+          require_code_owner_review: false
+          require_last_push_approval: false
+          # Required by the schema; omitting it fails validation.
+          required_review_thread_resolution: true
+      - type: required_status_checks
+        parameters:
+          strict_required_status_checks_policy: false
+          required_status_checks:
+            # Every check that runs on every PR. Path-filtered workflows (docs,
+            # e2e) stay out: a required check that does not run blocks the PR
+            # forever. Never add `renovate/stability-days`; it deadlocks merges.
+            #
+            # integration_id pins the app: 15368 is GitHub Actions, 1861 the DCO
+            # App. A check of the same name from another app cannot satisfy it.
+            - context: check
+              integration_id: 15368
+            - context: DCO
+              integration_id: 1861
+            # CLA Assistant posts a commit status through an OAuth app, not a
+            # GitHub App, so there is no integration_id to pin.
+            - context: license/cla
+
+  # The git tag is the release version (release.yml), so a pushed tag must never
+  # move or disappear. Creating one stays open: release.yml creates them.
+  - name: protect-tags
+    target: tag
+    enforcement: active
+    conditions:
+      ref_name:
+        include: ["~ALL"]
+        exclude: []
+    bypass_actors: []
+    rules:
+      - type: deletion
+      - type: update
 
 # Generated from shotledger/shotledger's live labels on 2026-10-14, all of them.
 # Referenced by the issue templates, Renovate and hand triage; GitHub issue

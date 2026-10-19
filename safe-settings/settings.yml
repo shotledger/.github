@@ -39,7 +39,6 @@ repository:
 # Labels are declared per suborg (suborgs/product.yml), not here: a label list
 # at this level would also be applied to `.github` and replace its own labels.
 #
-# No `rulesets:` or `environments:` anywhere in this config. This is a free org
-# and both repos are private: org rulesets need GitHub Team, repository rulesets
-# on a private repo need GitHub Pro, and environment protection rules are not
-# available either. Each would fail the whole sync.
+# Rulesets are declared per suborg too: org rulesets need GitHub Team, while a
+# repository ruleset is free on a public repo. On a private repo on this free
+# plan it fails the whole sync, so `.github` (private) gets none.
