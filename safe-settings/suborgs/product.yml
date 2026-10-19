@@ -6,9 +6,13 @@ suborgrepos:
 # Without a suborg entry, all repos share the same repoConfig reference via
 # Object.assign() mutation. Adding a suborg causes mergeDeep({}, ...) which
 # creates a fresh object per repo, giving each repo its correct name.
-repository: {}
+#
+# Auto-merge is on for this repo only: `.github` stays private, where the free
+# plan has no auto-merge. Like the rulesets, it needs shotledger public.
+repository:
+  allow_auto_merge: true
 
-# Repository ruleset, so it needs the repo public: on a private repo on the free
+# Repository rulesets, so they need the repo public: on a private repo on the free
 # plan it fails the whole sync.
 rulesets:
   - name: protect-main
@@ -45,13 +49,29 @@ rulesets:
             # e2e) stay out: a required check that does not run blocks the PR
             # forever. Never add `renovate/stability-days`; it deadlocks merges.
             #
-            # 15368 is GitHub Actions; a check of the same name from another app
-            # cannot satisfy it.
+            # integration_id pins the app: 15368 is GitHub Actions, 1861 the DCO
+            # App. A check of the same name from another app cannot satisfy it.
             - context: check
               integration_id: 15368
+            - context: DCO
+              integration_id: 1861
             # CLA Assistant posts a commit status through an OAuth app, not a
             # GitHub App, so there is no integration_id to pin.
             - context: license/cla
+
+  # The git tag is the release version (release.yml), so a pushed tag must never
+  # move or disappear. Creating one stays open: release.yml creates them.
+  - name: protect-tags
+    target: tag
+    enforcement: active
+    conditions:
+      ref_name:
+        include: ["~ALL"]
+        exclude: []
+    bypass_actors: []
+    rules:
+      - type: deletion
+      - type: update
 
 # Generated from shotledger/shotledger's live labels on 2026-10-14, all of them.
 # Referenced by the issue templates, Renovate and hand triage; GitHub issue
