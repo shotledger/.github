@@ -18,10 +18,25 @@ rulesets:
       ref_name:
         include: ["~DEFAULT_BRANCH"]
         exclude: []
-    bypass_actors: []
+    bypass_actors:
+      # Sole-maintainer org: the review requirement below is real four-eyes only
+      # once a second reviewer exists; until then the org admin bypasses it.
+      # Renovate gets no bypass: renovate-approve satisfies the review, and every
+      # check stays enforced on its PRs.
+      - actor_id: 1
+        actor_type: OrganizationAdmin
+        bypass_mode: always
     rules:
       - type: deletion
       - type: non_fast_forward
+      - type: pull_request
+        parameters:
+          required_approving_review_count: 1
+          dismiss_stale_reviews_on_push: true
+          require_code_owner_review: false
+          require_last_push_approval: false
+          # Required by the schema; omitting it fails validation.
+          required_review_thread_resolution: true
       - type: required_status_checks
         parameters:
           strict_required_status_checks_policy: false
