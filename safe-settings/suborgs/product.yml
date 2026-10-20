@@ -20,7 +20,9 @@ rulesets:
     enforcement: active
     conditions:
       ref_name:
-        include: ["~DEFAULT_BRANCH"]
+        # release/* and hotfix/* too: they are the other refs the `release`
+        # environment deploys from, and it accepts protected branches only.
+        include: ["~DEFAULT_BRANCH", "refs/heads/release/*", "refs/heads/hotfix/*"]
         exclude: []
     bypass_actors:
       # Sole-maintainer org: the review requirement below is real four-eyes only
@@ -78,13 +80,17 @@ rulesets:
 environments:
   # The approval gate in release.yml's `build` job. Self-review is allowed: the
   # maintainer who dispatches a release is normally the one who approves it.
+  # Deploys only from branches a ruleset protects (protect-main above), never
+  # from a tag.
   - name: release
     wait_timer: 0
     prevent_self_review: false
     reviewers:
       - id: 1577689 # jimisola
         type: User
-    deployment_branch_policy: ~
+    deployment_branch_policy:
+      protected_branches: true
+      custom_branch_policies: false
 
   # GitHub Pages deployments; kept as it is.
   - name: github-pages
