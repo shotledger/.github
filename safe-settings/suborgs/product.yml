@@ -73,6 +73,24 @@ rulesets:
       - type: deletion
       - type: update
 
+# safe-settings deletes any environment not listed here, so both existing ones
+# are declared. A required reviewer needs the repo public on the free plan.
+environments:
+  # The approval gate in release.yml's `build` job. Self-review is allowed: the
+  # maintainer who dispatches a release is normally the one who approves it.
+  - name: release
+    wait_timer: 0
+    prevent_self_review: false
+    reviewers:
+      - id: 1577689 # jimisola
+        type: User
+    deployment_branch_policy: ~
+
+  # GitHub Pages deployments; kept as it is.
+  - name: github-pages
+    wait_timer: 0
+    deployment_branch_policy: ~
+
 # Generated from shotledger/shotledger's live labels on 2026-10-14, all of them.
 # Referenced by the issue templates, Renovate and hand triage; GitHub issue
 # forms and Renovate silently drop labels that do not exist.
