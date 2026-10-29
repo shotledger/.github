@@ -14,6 +14,7 @@ community health files or templates; it only holds this configuration.
 | `safe-settings/settings.yml` | org-wide repository defaults (squash-only, branch cleanup, sign-off, security toggles) |
 | `safe-settings/suborgs/product.yml` | `shotledger`: its full label set, auto-merge, and the `protect-main` and `protect-tags` rulesets, and its environments |
 | `safe-settings/suborgs/meta.yml` | this repo: the defaults only, labels untouched |
+| `safe-settings/repos/.github.yml` | this repo: the `safe-settings` environment the sync job runs in |
 | `safe-settings/deployment-settings.yml` | scope: an empty exclude list, deliberately |
 
 Things that bite:
