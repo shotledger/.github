@@ -36,6 +36,7 @@ Things that bite:
 - **Merging a settings PR is the apply.** There is no separate step.
 
 Authentication is the org's safe-settings GitHub App: variable
-`SAFE_SETTINGS_APP_ID` and secret `SAFE_SETTINGS_PRIVATE_KEY` on this repository.
-The workflow runs only on `push` to `main`, on schedule and on manual dispatch,
-so the key is never exposed to a fork.
+`SAFE_SETTINGS_APP_ID` on this repository, and secret `SAFE_SETTINGS_PRIVATE_KEY`
+on its `safe-settings` environment, which only `main` can deploy to (declared in
+`safe-settings/repos/.github.yml`). A workflow run from any other branch never
+receives the key.
